@@ -17,7 +17,7 @@ public class daoSistema {
     public ResultSet listarMedicos() throws ClassNotFoundException{
         
         conn = conexion.Conectar();
-        String sql = "SELECT Nombre FROM Medico";
+        String sql = "SELECT NombreMedico FROM Medico";
         
         try {
            ps = conn.prepareStatement(sql);
@@ -32,7 +32,7 @@ public class daoSistema {
     public int obtenerIdMedico(String nombre) throws ClassNotFoundException{
         
         conn = conexion.Conectar();
-        String sql = "SELECT * FROM medico where Nombre = ?";
+        String sql = "SELECT * FROM medico where NombreMedico = ?";
         int IdMedico = 0;
         try {
             ps = conn.prepareStatement(sql);
@@ -104,7 +104,24 @@ public class daoSistema {
         }
         
         return resultado;
-        
-    
     }
+    
+    public ResultSet listarCitas() throws ClassNotFoundException{
+       conn = conexion.Conectar();
+       String sql = """
+                    SELECT paciente.Nombre,paciente.Cedula,medico.NombreMedico,medico.Consultorio FROM hospital.citas INNER JOIN paciente ON paciente.IdPaciente = citas.Paciente_IdPaciente INNER JOIN medico
+                    ON medico.IdMedico = citas.Medico_IdMedico""";
+       
+        try {
+            ps = conn.prepareStatement(sql);
+            result = ps.executeQuery();
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+        return result;
+    }   
+    
+    
 }

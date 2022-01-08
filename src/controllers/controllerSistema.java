@@ -7,6 +7,7 @@ import views.Hospital;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import models.Paciente;
 
 
@@ -31,7 +32,23 @@ public class controllerSistema implements ActionListener{
         viewHospital.setVisible(true);
         
         listarMedicos();
-        
+        listarTabla();
+
+    }
+    
+    public void listarTabla() throws ClassNotFoundException{
+    
+        DefaultTableModel modelo = new DefaultTableModel();
+        ResultSet rs = sistemaDAO.listarCitas();
+        modelo.setColumnIdentifiers(new Object[]{"Nombre Paciente","Cedula Paciente","Nombre Medico","Consultorio"});try {
+            while(rs.next()){
+                modelo.addRow(new Object[]{rs.getString("Nombre"),rs.getString("Cedula"),rs.getString("NombreMedico"),rs.getString("Consultorio")});
+            }
+            viewHospital.tablaCitas.setModel(modelo);
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    
     }
     
     public void listarMedicos() throws ClassNotFoundException, SQLException{
@@ -39,7 +56,7 @@ public class controllerSistema implements ActionListener{
         ResultSet medicos =   sistemaDAO.listarMedicos();
         String NombreMedico;
         while(medicos.next()){
-            NombreMedico =  medicos.getString("Nombre");
+            NombreMedico =  medicos.getString("NombreMedico");
             viewHospital.cbMedico.addItem(NombreMedico);
         }
        
@@ -80,7 +97,8 @@ public class controllerSistema implements ActionListener{
                 
                 if(resultado == 1){
                     JOptionPane.showMessageDialog(null, "Registro Exitoso");
-               }
+                    listarTabla();
+                }
                 
             }catch(ClassNotFoundException ex) {
                 System.out.println(ex);
