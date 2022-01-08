@@ -7,3 +7,6 @@ Sistema basico para agendamiento de citas con lenguaje de programacion JAVA Y Ba
 ![img](https://i.imgur.com/hLD5sXE.png)
 
 
+## Interfaz Grafica
+
+![img](https://i.imgur.com/EDziPaA.png)
